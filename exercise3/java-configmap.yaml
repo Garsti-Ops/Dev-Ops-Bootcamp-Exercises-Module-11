@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-java-app-configmap
+data:
+  dbServer: "mysql-primary"
+  dbName: "db"

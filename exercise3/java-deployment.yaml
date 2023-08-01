@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-java-app
+  labels:
+    app: my-java-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-java-app
+      profile: fargate
+  template:
+    metadata:
+      labels:
+        app: my-java-app
+        profile: fargate
+    spec:
+      containers:
+        - name: my-java-app
+          image: garstiops/garstiges-secret-repo:java-mysql-app-1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: dbUser
+                  name: my-java-app-secret
+            - name: DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  key: dbPwd
+                  name: my-java-app-secret
+            - name: DB_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  key: dbServer
+                  name: my-java-app-configmap
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: dbName
+                  name: my-java-app-configmap
+      imagePullSecrets:
+        - name: regrecd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-java-service
+  labels:
+    app: my-java-app
+spec:
+  selector:
+    app: my-java-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: LoadBalancer
