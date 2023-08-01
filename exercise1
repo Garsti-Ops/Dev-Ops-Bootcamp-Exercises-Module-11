@@ -1,0 +1,10 @@
+eksctl create \
+--name practice-cluster \
+--version 1.27 \
+--region eu-central-1 \
+--nodegroup-name practice nodes \
+--node-type t2.micro \
+--nodes 3 \
+--node-min 1 \
+--nodes-max 3 \
+--fargate
