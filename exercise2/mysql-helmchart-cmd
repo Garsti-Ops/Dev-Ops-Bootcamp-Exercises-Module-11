@@ -1,0 +1,1 @@
+helm install mysql oci://registry-1.docker.io/bitnamicharts/mysql -f mysql-values.yaml
